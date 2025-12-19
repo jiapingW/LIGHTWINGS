@@ -111,11 +111,10 @@ def main(args):
                     )
                 torch.cuda.synchronize()
                 output_tokens = output_ids[0][len(input_ids[0]):]
-                if accept_len>0.85:
-                    all_time += time.time() - start_time
-                    all_accept_len += accept_len
-                    all_generate_tokens += output_tokens.shape[0]
-                    data_nums += 1
+                all_time += time.time() - start_time
+                all_accept_len += accept_len
+                all_generate_tokens += output_tokens.shape[0]
+                data_nums += 1
                 
             origin_datas[data]['prediction'] = tokenizer.decode(output_tokens, skip_special_tokens=True)
             f.write(json.dumps(
