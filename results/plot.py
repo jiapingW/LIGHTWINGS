@@ -51,16 +51,16 @@ def plot_four_acc(df_all, output_file="accuracy_comparison.png"):
     
     # 子图标题
     subplot_titles = [
-        "Accuracy on position 0",
-        "Accuracy on position 6",
-        "Accuracy on position 0",
-        "Accuracy on position 6"
+        "Prediction accuracy at position 0 on the training set",
+        "Prediction accuracy at position 6 on the training set",
+        "Prediction accuracy at position 0 on the evaluation set",
+        "Prediction accuracy at position 6 on the evaluation set",
     ]
     
     # 【新增】底部说明文字 (Caption)
-    bottom_caption = (
-        "We trained drafters using linear attention and softmax attention on the ShareGPT dataset, tracking prediction accuracy at positions 0 and 6 on both training and evaluation sets.\nThe results demonstrate that the linear attention drafter exhibits stable training and achieves a higher acceptance rate."
-    )
+    # bottom_caption = (
+    #     "We trained drafters using linear attention and softmax attention on the ShareGPT dataset, tracking prediction accuracy at positions 0 and 6 on both training and evaluation sets.\nThe results demonstrate that the linear attention drafter exhibits stable training and achieves a higher acceptance rate."
+    # )
     
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
     
@@ -103,13 +103,14 @@ def plot_four_acc(df_all, output_file="accuracy_comparison.png"):
     
     # 【新增】在底部添加文字
     # x=0.5, y=0.02 表示水平居中，位于底部上方 2% 的位置
-    fig.text(
-        0.5, 0.02, 
-        bottom_caption, 
-        ha='center', 
-        fontsize=14, 
-        wrap=True
-    )
+    # fig.text(
+    #     0.5, 0.02, 
+    #     # bottom_caption, 
+    #     None
+    #     ha='center', 
+    #     fontsize=14, 
+    #     wrap=True
+    # )
     
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"\n✅ Plot saved to: {output_file}")
