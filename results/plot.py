@@ -49,11 +49,28 @@ def plot_four_acc(df_all, output_file="accuracy_comparison.png"):
         'eval/acc_6'
     ]
     
+    # 子图标题
+    subplot_titles = [
+        "Accuracy on position 0",
+        "Accuracy on position 6",
+        "Accuracy on position 0",
+        "Accuracy on position 6"
+    ]
+    
+    # 【新增】底部说明文字 (Caption)
+    bottom_caption = (
+        "We trained drafters using linear attention and softmax attention on the ShareGPT dataset, tracking prediction accuracy at positions 0 and 6 on both training and evaluation sets.\nThe results demonstrate that the linear attention drafter exhibits stable training and achieves a higher acceptance rate."
+    )
+    
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+    
+    # 顶部大标题
+    # fig.suptitle("Training on sharegpt dataset", fontsize=20, fontweight='bold')
+    
     axes = axes.flatten()
     
     sources = sorted(df_all['source'].unique())
-    linestyles = ['-', '--', '-.', ':']  # 支持最多4个实验
+    linestyles = ['-', '--', '-.', ':']
     
     for idx, tag in enumerate(target_tags):
         ax = axes[idx]
@@ -72,22 +89,36 @@ def plot_four_acc(df_all, output_file="accuracy_comparison.png"):
                 )
                 plotted = True
         
-        ax.set_title(tag, fontsize=14)
+        ax.set_title(subplot_titles[idx], fontsize=14)
         ax.set_xlabel('Step')
         ax.set_ylabel('Accuracy')
         ax.grid(True, linestyle='--', alpha=0.6)
         if plotted:
             ax.legend()
     
-    plt.tight_layout()
+    # 【修改布局】
+    # rect=[left, bottom, right, top]
+    # 将 bottom 从 0.03 改为 0.1，为底部的 caption 留出足够的空白区域
+    plt.tight_layout(rect=[0, 0.1, 1, 0.95])
+    
+    # 【新增】在底部添加文字
+    # x=0.5, y=0.02 表示水平居中，位于底部上方 2% 的位置
+    fig.text(
+        0.5, 0.02, 
+        bottom_caption, 
+        ha='center', 
+        fontsize=14, 
+        wrap=True
+    )
+    
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"\n✅ Plot saved to: {output_file}")
     plt.show()
 
 def main():
     parser = argparse.ArgumentParser(description="Plot train/eval acc_0 and acc_6 from two TensorBoard logs")
-    parser.add_argument("--logdir1", help="Path to first TensorBoard log directory (e.g., linear_attn)")
-    parser.add_argument("--logdir2", help="Path to second TensorBoard log directory (e.g., softmax_attn)")
+    parser.add_argument("--logdir1", help="Path to first TensorBoard log directory")
+    parser.add_argument("--logdir2", help="Path to second TensorBoard log directory")
     parser.add_argument("--output", "-o", default="accuracy_comparison.png", help="Output image file")
     args = parser.parse_args()
     
